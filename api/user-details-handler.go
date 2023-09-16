@@ -7,42 +7,33 @@ import (
 
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
+	"github.com/Mitmadhu/broker/helper"
 )
 
 func GetUserDetails(w http.ResponseWriter, r *http.Request) {
     // Get the current working directory
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("invalid input"))
+		helper.SendErrorResponse(w, "bad request body", http.StatusBadRequest)
 		return
 	}
 	req := request.UserRequest{}
 	err = json.Unmarshal(body, &req)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("invalid input"))
+		helper.SendErrorResponse(w, "bad request body", http.StatusBadRequest)
 		return
 	}
 
 	if req.Username != "ayush.madhu" || req.Password != "123"{
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("username/password is incorrect"))
+		helper.SendErrorResponse(w, "username/password is incorrect", http.StatusUnauthorized)
 		return
 		
 	}
-	w.Header().Set("Content-Type", "application/json")
 	resp := response.UserResponse{
 		Username: "mad.madhu",
 		Age: 32,
 		Address: "samastipura",
 		Email: "ayz.gmail@com",
 	}
-	b, err := json.Marshal(resp)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error while marshalling response"))
-		return
-	}
-	w.Write([]byte(b))
+	helper.SendSuccessResponse(w, resp, http.StatusAccepted)
 }
