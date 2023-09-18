@@ -1,8 +1,7 @@
 package response
 
-type UserResponse struct {
+type UserDetailsResponse struct {
 	Username string `json:"username"`
-	Age      int16  `json:"age"`
+	Age      uint16 `json:"age"`
 	Address  string `json:"address"`
-	Email    string `json:"email"`
 }

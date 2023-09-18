@@ -30,3 +30,23 @@ func SendSuccessResponse(w http.ResponseWriter, resp interface{}, code uint64){
 	b, _ := json.Marshal(succResp)
 	w.Write(b)
 }
+
+func SendErrorResponseArray(w http.ResponseWriter, errs []error){
+	var messages string
+	if len(errs) == 0 {
+		messages = ""
+	} else{
+		messages = errs[0].Error()
+	}
+	
+	for _, err := range errs[1:]{
+		messages += "\n " + err.Error()
+	}
+	errResp := response.ErrorResponse{
+		MsgId: "dummy error response",
+		StatusCode: response.HttpStatus(http.StatusBadRequest),
+		Message: messages,
+	}
+	b, _ := json.Marshal(errResp)
+	w.Write(b)
+}
