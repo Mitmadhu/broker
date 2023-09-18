@@ -1,14 +1,21 @@
 package model
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
+
+	"github.com/Mitmadhu/broker/constants"
+	"github.com/Mitmadhu/mysqlDB/config"
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	Username string
+	Username string `gorm:"primaryKey"`
 	Name     string
 	Age      uint16
+	Password string
 }
 
 func (u User) ValidateUser(db *gorm.DB, username string) (bool, error){
@@ -19,9 +26,21 @@ func (u User) ValidateUser(db *gorm.DB, username string) (bool, error){
 // GetUserByUsername return user details by username
 func (u User) GetUserByUsername(db *gorm.DB, username string)(User, error) {
 	// fetch user by username
+	var user User;
+	result := db.Where( "Username = ?", username).First(&user)
+	if(result == nil){
+		return User{}, errors.New(constants.InternalServerError)
+	}
+	if (result.Error == gorm.ErrRecordNotFound){
+		return nil, errors.New(constants.UserNotFound)
+	}
+	if(result.Error != nil){
+		return nil, result.Error
+	}
+
 	return User{
-		Name: "madhubala",
-		Age:  32,
+		Username: user.Username,
+		Age: user.Age,
 	}, nil
 }
 
