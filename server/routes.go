@@ -10,7 +10,7 @@ import (
 	"github.com/Mitmadhu/broker/api"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/helper"
-	"github.com/Mitmadhu/broker/utils"
+	"github.com/Mitmadhu/broker/constants"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -71,7 +71,7 @@ func setRequestObjType(reqObj ErrorHandler) func(http.Handler) http.Handler {
 			if reqObj.CheckError(w){
 				return
 			}
-            ctx := context.WithValue(r.Context(), utils.ReqPtr, reqObj)
+            ctx := context.WithValue(r.Context(), constants.ReqPtr, reqObj)
             r = r.WithContext(ctx)
             // Call the next handler
             next.ServeHTTP(w, r)

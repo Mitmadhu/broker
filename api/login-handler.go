@@ -5,11 +5,11 @@ import (
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
 	"github.com/Mitmadhu/broker/helper"
-	"github.com/Mitmadhu/broker/utils"
+	"github.com/Mitmadhu/broker/constants"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	obj := r.Context().Value(utils.ReqPtr)
+	obj := r.Context().Value(constants.ReqPtr)
 	req, ok := obj.(*request.LoginRequest)
 	if !ok {
 		helper.SendErrorResponse(w, "invalid request body", http.StatusBadRequest)
