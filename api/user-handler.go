@@ -5,17 +5,16 @@ import (
 
 	"github.com/Mitmadhu/broker/dto/response"
 	"github.com/Mitmadhu/broker/helper"
-	"github.com/Mitmadhu/mysqlDB/config"
 	"github.com/Mitmadhu/mysqlDB/database/model"
 )
 
-func GetUserDetails(w http.ResponseWriter, r *http.Request) {
+func GetUserDetails(w http.ResponseWriter, dto interface{}) {
 
 	// validate token
-	
+	println("user-details")
 	// get user details
 	u := model.User{}
-	user, err := u.GetUserByID(config.GetDB(), "1")
+	user, err := u.GetUserByID("1")
 	if err != nil{
 		helper.SendErrorResponse(w, "internal server err", http.StatusInternalServerError)
 	}

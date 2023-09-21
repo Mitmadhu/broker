@@ -8,5 +8,6 @@ type Friend struct{
 }
 
 func (f Friend) CreateTable(db *gorm.DB) error{
+	db.Exec("DROP TABLE IF EXISTS friends")
 	return db.AutoMigrate(&Friend{})
 }
