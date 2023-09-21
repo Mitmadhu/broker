@@ -1,8 +1,12 @@
-# github.com/Mitmadhu/mysqlDB v1.0.2-0.20230918133456-be9f8674a29c
+# github.com/Mitmadhu/mysqlDB v1.0.2-0.20230921170209-33c255143dce
 ## explicit; go 1.21.1
 github.com/Mitmadhu/mysqlDB/config
 github.com/Mitmadhu/mysqlDB/database
 github.com/Mitmadhu/mysqlDB/database/model
+github.com/Mitmadhu/mysqlDB/helper
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
+github.com/dgrijalva/jwt-go
 # github.com/felixge/httpsnoop v1.0.1
 ## explicit; go 1.13
 github.com/felixge/httpsnoop
@@ -21,6 +25,10 @@ github.com/jinzhu/inflection
 # github.com/jinzhu/now v1.1.5
 ## explicit; go 1.12
 github.com/jinzhu/now
+# golang.org/x/crypto v0.13.0
+## explicit; go 1.17
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
 # gorm.io/driver/mysql v1.5.1
 ## explicit; go 1.14
 gorm.io/driver/mysql

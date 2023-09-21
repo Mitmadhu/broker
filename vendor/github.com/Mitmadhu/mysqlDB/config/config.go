@@ -23,6 +23,20 @@ func GetDB() *gorm.DB {
 	return Cnf.DB
 }
 
+func GetDBTemp() *gorm.DB{
+	if (Cnf.DB != nil){
+		return Cnf.DB
+	}
+	err := initDB()
+	if (err != nil){
+		panic(fmt.Sprintf("error %v", err))
+	}
+	if(Cnf.DB == nil){
+		panic(fmt.Sprintf("Connection db is nil, err : %v", err))
+	}
+	return Cnf.DB
+}
+
 func initDB()error{
 	// initDB
 	db, err := database.DBFactory("", "")

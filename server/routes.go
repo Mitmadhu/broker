@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,20 +9,37 @@ import (
 	"github.com/Mitmadhu/broker/api"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/helper"
-	"github.com/Mitmadhu/broker/constants"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-type ErrorHandler interface{
+type ErrorHandler interface {
 	CheckError(w http.ResponseWriter) bool
+}
+
+
+type routerRequest struct{
+	dto ErrorHandler
+	method string
+	handler func(http.ResponseWriter, interface{})
+}
+
+var routerMap = map[string]routerRequest{
+	"/user-details": {
+		dto: &request.UserDetailsRequest{},
+		method: http.MethodGet,
+		handler: api.GetUserDetails,
+	},
+	"/login": {
+		dto: &request.LoginRequest{},
+		method: http.MethodPost,
+		handler: api.Login,
+	},
 }
 
 func Routers() {
 	r := mux.NewRouter()
-
-	// Define a route for handling GET requests to the root path "/"
-    addApis(r)
+	addApis(r)
 
 	// Configure CORS middleware
 	corsOptions := handlers.CORS(
@@ -41,40 +57,26 @@ func Routers() {
 	}
 }
 
-func addApis(r *mux.Router){
-	rapper(r, "/login", api.Login, "POST", &request.LoginRequest{})
 
-	// user request
-	rapper(r, "/user-details", api.GetUserDetails, "GET", &request.UserDetailsRequest{})
+func addApis(r *mux.Router) {
+	for path, _:= range routerMap{
+		r.HandleFunc(path, middleHandler)
+	}
 }
 
-func rapper(r *mux.Router, path string, handler func(http.ResponseWriter, *http.Request), method string, reqObj ErrorHandler) {
-    customMiddleware := setRequestObjType(reqObj)
-	r.Use(customMiddleware)
-	r.HandleFunc(path, handler)
-    
-}
-
-
-// Middleware that sets a value in the request context
-
-// Custom middleware that accepts arguments
-func setRequestObjType(reqObj ErrorHandler) func(http.Handler) http.Handler {
-    return func(next http.Handler) http.Handler {
-        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-            b, err := io.ReadAll(r.Body)
-            if err != nil {
-                helper.SendErrorResponse(w, "invalid request body", http.StatusBadRequest)
-                return
-            }
-            json.Unmarshal(b, reqObj)
-			if reqObj.CheckError(w){
-				return
-			}
-            ctx := context.WithValue(r.Context(), constants.ReqPtr, reqObj)
-            r = r.WithContext(ctx)
-            // Call the next handler
-            next.ServeHTTP(w, r)
-        })
-    }
+func middleHandler(w http.ResponseWriter, r *http.Request) {
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		helper.SendErrorResponse(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+	reqObj, ok := routerMap[r.URL.Path]
+	if !ok {
+		helper.SendErrorResponse(w, "invalid URL", http.StatusNotFound)
+	}
+	json.Unmarshal(b, reqObj.dto)
+	if reqObj.dto.CheckError(w){
+		return
+	}
+	reqObj.handler(w, reqObj.dto)
 }

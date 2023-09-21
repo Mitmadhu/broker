@@ -22,3 +22,7 @@ func (u *UserDetailsRequest) CheckError(w http.ResponseWriter) bool {
 	}
 	return len(errs) != 0
 }
+
+func (u *UserDetailsRequest) Validate() bool{
+	return false
+}
