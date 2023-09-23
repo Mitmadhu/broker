@@ -5,5 +5,5 @@ type LoginResponse struct {
 }
 
 type RegisterResponse struct{
-	Success bool 
+	Username string `json:"username"` 
 }

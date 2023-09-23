@@ -14,7 +14,7 @@ import (
 )
 
 type ErrorHandler interface {
-	CheckError(w http.ResponseWriter) bool
+	HasError(w http.ResponseWriter) bool
 }
 
 
@@ -34,6 +34,11 @@ var routerMap = map[string]routerRequest{
 		dto: &request.LoginRequest{},
 		method: http.MethodPost,
 		handler: api.Login,
+	},
+	"/register" : {
+		dto : &request.RegisterRequest{},
+		method: http.MethodPost,
+		handler: api.Register,
 	},
 }
 
@@ -67,15 +72,15 @@ func addApis(r *mux.Router) {
 func middleHandler(w http.ResponseWriter, r *http.Request) {
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		helper.SendErrorResponse(w, "invalid request body", http.StatusBadRequest)
+		helper.SendErrorResponse(w, "invalid request body", "", http.StatusBadRequest)
 		return
 	}
 	reqObj, ok := routerMap[r.URL.Path]
 	if !ok {
-		helper.SendErrorResponse(w, "invalid URL", http.StatusNotFound)
+		helper.SendErrorResponse(w, "invalid URL", "", http.StatusNotFound)
 	}
 	json.Unmarshal(b, reqObj.dto)
-	if reqObj.dto.CheckError(w){
+	if reqObj.dto.HasError(w){
 		return
 	}
 	reqObj.handler(w, reqObj.dto)
