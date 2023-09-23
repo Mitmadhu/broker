@@ -4,54 +4,49 @@ import (
 	"errors"
 	"time"
 
-	"github.com/Mitmadhu/broker/constants"
 	"github.com/dgrijalva/jwt-go"
 )
 
 var secretKey = []byte("secret-madhu-ka-key")
 
-type customClaims struct {
+type CustomClaims struct {
 	jwt.StandardClaims
 	Username    string `json:"username"`
-	RefreshTime int64  `json:"refresh_time"`
 	
 }
 
-func GenerateToken(username string, tokenType string) (string, error) {
-	var expiryTime int64
-	switch tokenType{
-	case constants.AccessToken:
-		expiryTime = time.Now().Add(time.Second).Unix()
-	case constants.RefreshToken:
-		expiryTime = time.Now().Add(time.Minute).Unix()
-	default:
-		panic("invalid tokentype to genereate jwt token")
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims{	
+func generateJWTToken(username string, expiryTime int64) (string, error){
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, CustomClaims{	
 		Username: username,
-		RefreshTime: time.Now().Add(time.Hour).Unix(),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expiryTime,
 		},
 	})
 	
-	tokenString, err := token.SignedString(secretKey)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
+	return token.SignedString(secretKey)
 }
 
-func Validate(tokenString string) (*customClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &customClaims{}, func(token *jwt.Token) (interface{}, error) {
+func GenerateToken(username string) (string, string, error) {
+	accessToken, err := generateJWTToken(username, time.Now().Add(time.Second).Unix())
+	if err != nil {
+		return "", "", err
+	}
+	refreshToken, err := generateJWTToken(username, time.Now().Add(time.Minute *60).Unix())
+	if err != nil {
+		return "", "", err
+	}
+	return accessToken, refreshToken, nil
+}
+
+func Validate(tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return secretKey, nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	claims, ok := token.Claims.(*customClaims)
+	claims, ok := token.Claims.(*CustomClaims)
 	if !ok {
 		return nil, errors.New("errror converting standard claim")
 	}
