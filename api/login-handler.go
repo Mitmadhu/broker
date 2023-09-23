@@ -1,10 +1,10 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Mitmadhu/broker/auth/jwt"
-	"github.com/Mitmadhu/broker/constants"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
 	"github.com/Mitmadhu/broker/helper"
@@ -22,7 +22,7 @@ func Login(w http.ResponseWriter, dto interface{}) {
 	validate, err := u.ValidateUser(req.Username, req.Password)
 	
 	if err != nil{
-		helper.SendErrorResponse(w, "internal server error", http.StatusInternalServerError)
+		helper.SendErrorResponse(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -31,15 +31,19 @@ func Login(w http.ResponseWriter, dto interface{}) {
 		return
 	}
 	
-	token, err := jwtAuth.GenerateToken(req.Username, constants.AccessToken)
+	accessToken, refreshToken, err := jwtAuth.GenerateToken(req.Username)
 	if err != nil{
+		fmt.Printf("error while generating jwt token, err: %v", err.Error())
 		helper.SendErrorResponse(w, "internal server error", http.StatusInternalServerError)
 		return
 	}
 	resp := response.LoginResponse{
 		Success: true,
-		Token: token,
-		IsTokenRefreshed: true,
 	}
-	helper.SendSuccessResponse(w, resp, http.StatusAccepted)
+	claims := helper.JWTValidation{
+		AccessToken: accessToken,
+		RefreshToken: refreshToken,
+		IsRefreshed: true,
+	}
+	helper.SendSuccessRespWithClaims(w, resp, http.StatusAccepted, claims)
 }
