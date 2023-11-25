@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/Mitmadhu/broker/api"
+	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
+	"github.com/Mitmadhu/broker/constants"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/helper"
 	"github.com/gorilla/handlers"
@@ -17,28 +19,40 @@ type ErrorHandler interface {
 	HasError(w http.ResponseWriter) bool
 }
 
+type routerRequest struct {
+	dto            ErrorHandler
+	method         string
+	handler        func(http.ResponseWriter, interface{})
+	validationType string
+}
 
-type routerRequest struct{
-	dto ErrorHandler
-	method string
-	handler func(http.ResponseWriter, interface{})
+type Token struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+func (t Token) HasError(w http.ResponseWriter) bool {
+	return false
 }
 
 var routerMap = map[string]routerRequest{
 	"/user-details": {
-		dto: &request.UserDetailsRequest{},
-		method: http.MethodGet,
-		handler: api.GetUserDetails,
+		dto:            &request.UserDetailsRequest{},
+		method:         http.MethodGet,
+		handler:        api.GetUserDetails,
+		validationType: constants.JWTValidation,
 	},
 	"/login": {
-		dto: &request.LoginRequest{},
-		method: http.MethodPost,
-		handler: api.Login,
+		dto:            &request.LoginRequest{},
+		method:         http.MethodPost,
+		handler:        api.Login,
+		validationType: constants.NoneValidation,
 	},
-	"/register" : {
-		dto : &request.RegisterRequest{},
-		method: http.MethodPost,
-		handler: api.Register,
+	"/register": {
+		dto:            &request.RegisterRequest{},
+		method:         http.MethodPost,
+		handler:        api.Register,
+		validationType: constants.NoneValidation,
 	},
 }
 
@@ -62,9 +76,8 @@ func Routers() {
 	}
 }
 
-
 func addApis(r *mux.Router) {
-	for path, _:= range routerMap{
+	for path, _ := range routerMap {
 		r.HandleFunc(path, middleHandler)
 	}
 }
@@ -80,8 +93,26 @@ func middleHandler(w http.ResponseWriter, r *http.Request) {
 		helper.SendErrorResponse(w, "invalid URL", "", http.StatusNotFound)
 	}
 	json.Unmarshal(b, reqObj.dto)
-	if reqObj.dto.HasError(w){
+	// check for errors
+	if reqObj.dto.HasError(w) {
 		return
 	}
+	if reqObj.validationType == constants.NoneValidation {
+		reqObj.handler(w, reqObj.dto)
+		return
+	}
+
+	// check for auth token
+	req := &Token{}
+	json.Unmarshal(b, req)
+	switch reqObj.validationType {
+	case constants.JWTValidation:
+		// its not coming here
+		if jwtAuth.IsJWTTokenExpired(req.AccessToken, req.RefreshToken) {
+			helper.SendErrorResponse(w, "", constants.TokenExipired, http.StatusUnauthorized)
+			return
+		}
+	}
 	reqObj.handler(w, reqObj.dto)
+
 }

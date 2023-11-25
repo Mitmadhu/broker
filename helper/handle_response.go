@@ -14,6 +14,7 @@ func SendErrorResponse(w http.ResponseWriter, msgID, msg string, code uint64) {
 		MsgId:      msgID,
 		Message:    msg,
 		StatusCode: response.HttpStatus(code),
+		Success: false,
 	}
 	b, _ := json.Marshal(errResp)
 	w.Write(b)
@@ -26,6 +27,7 @@ func SendSuccessResponse(w http.ResponseWriter, msgID string, resp interface{}, 
 		BaseResponse: response.BaseResponse{
 			MsgID: msgID,
 			StatusCode: code,
+			Success: true,
 		},
 		Response:   resp,
 	}
@@ -40,6 +42,7 @@ func SendSuccessRespWithClaims(w http.ResponseWriter, msgID string, resp interfa
 		BaseResponse: response.BaseResponse{
 			MsgID: msgID,
 			StatusCode: code,
+			Success: true,
 			IsTokenRefresh: claims.IsRefreshed,
 			AccessToken: claims.AccessToken,
 			RefreshToken: claims.RefreshToken,
@@ -62,7 +65,7 @@ func SendErrorResponseArray(w http.ResponseWriter, errs []error) {
 		messages += "\n " + err.Error()
 	}
 	errResp := response.ErrorResponse{
-		MsgId:      "dummy error response",
+		MsgId:      "",
 		StatusCode: response.HttpStatus(http.StatusBadRequest),
 		Message:    messages,
 	}

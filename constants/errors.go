@@ -7,4 +7,5 @@ const (
 	InvalidClaim        = "invalid claim"
 	TokenExipired       = "token is expired"
 	UsernameExists      = "username exists"
+	BadRequest          = "bad request"
 )

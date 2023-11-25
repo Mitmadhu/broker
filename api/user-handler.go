@@ -16,11 +16,7 @@ func GetUserDetails(w http.ResponseWriter, dto interface{}) {
 		return
 	}
 	// validate token
-	claims, err := helper.GetJWTClaims(req.AccessToken, req.RefreshToken)
-	if err != nil {
-		helper.SendErrorResponse(w, "invalid token", req.MsgId, http.StatusUnauthorized)
-		return
-	}
+	claims, _ := helper.GetJWTClaims(req.AccessToken, req.RefreshToken)
 
 	// get user details
 	u := model.User{}

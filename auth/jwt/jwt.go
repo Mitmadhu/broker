@@ -27,15 +27,24 @@ func generateJWTToken(username string, expiryTime int64) (string, error){
 }
 
 func GenerateToken(username string) (string, string, error) {
-	accessToken, err := generateJWTToken(username, time.Now().Add(time.Second).Unix())
+	accessToken, err := generateJWTToken(username, time.Now().Add(time.Hour).Unix())
 	if err != nil {
 		return "", "", err
 	}
-	refreshToken, err := generateJWTToken(username, time.Now().Add(time.Minute *60).Unix())
+	refreshToken, err := generateJWTToken(username, time.Now().Add(time.Hour * 6).Unix())
 	if err != nil {
 		return "", "", err
 	}
 	return accessToken, refreshToken, nil
+}
+
+func IsJWTTokenExpired(aToken, rToken string) bool{
+	_, err := Validate(aToken)
+	if err == nil {
+		return false
+	}
+	_, err = Validate(rToken)
+	return err != nil
 }
 
 func Validate(tokenString string) (*CustomClaims, error) {
