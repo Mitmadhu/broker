@@ -25,7 +25,7 @@ func (u User) ValidateUser(username string, password string) (bool, error) {
 	// validate the user
 	user, err := User{}.GetUserByUsername(username)
 	if err != nil {
-		return false, errors.New(constants.UserNotFound)
+		return false, err
 	}
 	password += user.Salt
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))

@@ -3,7 +3,7 @@ package request
 import (
 	"net/http"
 
-	"github.com/Mitmadhu/broker/helper"
+	"github.com/Mitmadhu/commons/helper"
 )
 
 type UserDetailsRequest struct {

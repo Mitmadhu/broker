@@ -1,5 +1,7 @@
-github.com/Mitmadhu/mysqlDB v1.0.2-0.20230921170209-33c255143dce h1:J6wsbagnTRE9KxU/dp6JprHK5TdTk7oF10v1era9bsY=
-github.com/Mitmadhu/mysqlDB v1.0.2-0.20230921170209-33c255143dce/go.mod h1:+3d3jK323cN9bFKcQG0DpaqF/fAtW4dZAlv5eQr271c=
+github.com/Mitmadhu/commons v0.0.0-20231127150318-d0b3dc0a2bb9 h1:NHLxgSlTlqGCP8Q4d8Q2QtJS7tgD/h0Nb4NxYv2A4JM=
+github.com/Mitmadhu/commons v0.0.0-20231127150318-d0b3dc0a2bb9/go.mod h1:+koYh1OLMwkEuqpHg/yoPmS8bUdRvgv0LxrPiAp5K/E=
+github.com/Mitmadhu/mysqlDB v1.0.2-0.20231126131255-207a3672ae1c h1:xAV2Ewy3f9B3Jt2zIyo+IhToVs+1eTTARzRzHAzcZjw=
+github.com/Mitmadhu/mysqlDB v1.0.2-0.20231126131255-207a3672ae1c/go.mod h1:nqCoEagxvf7d4lGzDAIs+FsE82ypSY+sJiPwD/+E44s=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/felixge/httpsnoop v1.0.1 h1:lvB5Jl89CsZtGIWuTcDM1E/vkVs49/Ml7JJe07l8SPQ=

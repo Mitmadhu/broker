@@ -12,6 +12,8 @@ WORKDIR /app
 
 COPY --from=builder  /app/broker-service .
 
+COPY config.json .
+
 EXPOSE 8080
 
 CMD [ "./broker-service" ]

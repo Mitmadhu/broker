@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Mitmadhu/broker/dto/response"
+	"github.com/Mitmadhu/commons/dto/response"
 )
 
 func SendErrorResponse(w http.ResponseWriter, msgID, msg string, code uint64) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(int(code))
+	
 	errResp := response.ErrorResponse{
 		MsgId:      msgID,
 		Message:    msg,
@@ -20,9 +21,9 @@ func SendErrorResponse(w http.ResponseWriter, msgID, msg string, code uint64) {
 	w.Write(b)
 }
 
-func SendSuccessResponse(w http.ResponseWriter, msgID string, resp interface{}, code response.HttpStatus) {
+func SendSuccessResponse(w http.ResponseWriter, msgID string, resp interface{}, code int) {
 	w.Header().Set("Content-type", "application/json")
-	w.WriteHeader(int(code))
+	w.WriteHeader(code)
 	succResp := response.SuccessResponse{
 		BaseResponse: response.BaseResponse{
 			MsgID: msgID,
@@ -35,23 +36,7 @@ func SendSuccessResponse(w http.ResponseWriter, msgID string, resp interface{}, 
 	w.Write(b)
 }
 
-func SendSuccessRespWithClaims(w http.ResponseWriter, msgID string, resp interface{}, code response.HttpStatus, claims JWTValidation) {
-	w.Header().Set("Content-type", "application/json")
-	w.WriteHeader(int(code))
-	succResp := response.SuccessResponse{
-		BaseResponse: response.BaseResponse{
-			MsgID: msgID,
-			StatusCode: code,
-			Success: true,
-			IsTokenRefresh: claims.IsRefreshed,
-			AccessToken: claims.AccessToken,
-			RefreshToken: claims.RefreshToken,
-		},
-		Response:     resp,
-	}
-	b, _ := json.Marshal(succResp)
-	w.Write(b)
-}
+
 
 func SendErrorResponseArray(w http.ResponseWriter, errs []error) {
 	var messages string
