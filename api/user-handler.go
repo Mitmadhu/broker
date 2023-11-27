@@ -5,6 +5,7 @@ import (
 
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
+	commonHelper "github.com/Mitmadhu/commons/helper"
 	"github.com/Mitmadhu/broker/helper"
 	"github.com/Mitmadhu/mysqlDB/database/model"
 )
@@ -12,7 +13,7 @@ import (
 func GetUserDetails(w http.ResponseWriter, dto interface{}) {
 	req, ok := dto.(*request.UserDetailsRequest)
 	if !ok {
-		helper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
+		commonHelper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
 		return
 	}
 	// validate token
@@ -22,7 +23,7 @@ func GetUserDetails(w http.ResponseWriter, dto interface{}) {
 	u := model.User{}
 	user, err := u.GetUserByID("1")
 	if err != nil {
-		helper.SendErrorResponse(w, "internal server err", req.MsgId, http.StatusInternalServerError)
+		commonHelper.SendErrorResponse(w, "internal server err", req.MsgId, http.StatusInternalServerError)
 		return
 	}
 	resp := response.UserDetailsResponse{
