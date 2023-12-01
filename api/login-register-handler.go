@@ -1,20 +1,17 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/Mitmadhu/commons/handle_http"
+	clients "command-line-arguments/home/madhu/go/src/github.com/Mitmadhu/commons/clients/mysql_client_impl.go"
 
-	"github.com/Mitmadhu/broker/config"
-	"github.com/Mitmadhu/broker/auth/jwt"
+	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
 	"github.com/Mitmadhu/broker/constants"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
-	cmnConsts "github.com/Mitmadhu/commons/constants"
-	cmnHelper "github.com/Mitmadhu/commons/helper"
 	"github.com/Mitmadhu/broker/helper"
+	cmnHelper "github.com/Mitmadhu/commons/helper"
 	"github.com/Mitmadhu/mysqlDB/database/model"
 	mysqlDto "github.com/Mitmadhu/mysqlDB/dto"
 )
@@ -25,27 +22,24 @@ func Login(w http.ResponseWriter, dto interface{}) {
 		cmnHelper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
 		return
 	}
-	// validate password
-	byteResp, err := handle_http.Call(config.Configs.Endpoints[cmnConsts.MYSQLDB] + "/user-exists", http.MethodPost, mysqlDto.ValidateUserRequest{
-		BaseRequest: mysqlDto.BaseRequest{MsgId: req.MsgId},
-		Username:    req.Username,
-		Password:    req.Password,
+
+	// TODO validate user
+	mysqlClient := clients.MysqlClientImpl{}
+	resp, err := mysqlClient.Login("http://localhost:8081", "POST", mysqlDto.ValidateUserRequest{
+		Username: "ayush",
+		Password: "123",
+		BaseRequest: mysqlDto.BaseRequest{
+			MsgID: "123",
+		},
 	})
 
 	if err != nil {
-		cmnHelper.SendErrorResponse(w, req.MsgId, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	validate := &mysqlDto.ValidateUserResponse{}
-	json.Unmarshal(byteResp, validate)
-	
-	if !validate.IsValid {
-		cmnHelper.SendErrorResponse(w, req.MsgId, constants.UserNotFound , http.StatusUnauthorized)
-		return
+		return nil, err
 	}
 
+
 	accessToken, refreshToken, err := jwtAuth.GenerateToken(req.Username)
-	if err != nil{
+	if err != nil {
 		fmt.Printf("error while generating jwt token, err: %v", err.Error())
 		cmnHelper.SendErrorResponse(w, req.MsgId, "internal server error", http.StatusInternalServerError)
 		return
@@ -54,9 +48,9 @@ func Login(w http.ResponseWriter, dto interface{}) {
 		Success: true,
 	}
 	claims := helper.JWTValidation{
-		AccessToken: accessToken,
+		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
-		IsRefreshed: true,
+		IsRefreshed:  true,
 	}
 	helper.SendSuccessRespWithClaims(w, req.MsgId, resp, http.StatusAccepted, claims)
 }

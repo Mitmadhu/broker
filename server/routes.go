@@ -23,6 +23,12 @@ func InitRouter(){
 			Handler:        api.Login,
 			ValidationType: constants.NoneValidation,
 		},
+		"/register" : {
+			DTO : &request.RegisterRequest{},
+			Method: http.MethodPost,
+			Handler: api.Register,
+			ValidationType: constants.NoneValidation,
+		},
 	}
 	router.Routers(config.Configs.Port)
 }
