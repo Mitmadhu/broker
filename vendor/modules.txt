@@ -12,6 +12,7 @@ github.com/Mitmadhu/mysqlDB/config
 github.com/Mitmadhu/mysqlDB/database
 github.com/Mitmadhu/mysqlDB/database/model
 github.com/Mitmadhu/mysqlDB/dto
+github.com/Mitmadhu/mysqlDB/dto
 github.com/Mitmadhu/mysqlDB/helper
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 ## explicit

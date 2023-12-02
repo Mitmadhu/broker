@@ -2,6 +2,7 @@ package helper
 
 import (
 	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
+	"github.com/Mitmadhu/broker/dto/response"
 )
 
 type JWTValidation struct {
