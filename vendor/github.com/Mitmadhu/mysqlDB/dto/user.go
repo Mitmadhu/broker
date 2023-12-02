@@ -14,12 +14,13 @@ type ValidateUserRequest struct {
 }
 
 type ValidateUserResponse struct {
-	IsValid bool `json:"is_valid"`
+	BaseResponse
+	IsValid *bool `json:"is_valid"`
 }
 
 func (v ValidateUserRequest) HasError(w http.ResponseWriter) bool {
 	errs := []error{}
-	helper.CheckEmpty(v.MsgId, &errs, "msg_id")
+	helper.CheckEmpty(v.MsgID, &errs, "msg_id")
 	helper.CheckEmpty(v.Username, &errs, "username")
 	if len(errs) > 0 {
 		helper.SendErrorResponseArray(w, errs)

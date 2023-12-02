@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
-	"github.com/Mitmadhu/broker/constants"
+	"github.com/Mitmadhu/commons/constants"
 	"github.com/Mitmadhu/commons/helper"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -87,7 +87,7 @@ func middleHandler(w http.ResponseWriter, r *http.Request) {
 	case constants.JWTValidation:
 		// its not coming here
 		if jwtAuth.IsJWTTokenExpired(req.AccessToken, req.RefreshToken) {
-			helper.SendErrorResponse(w, "", constants.TokenExipired, http.StatusUnauthorized)
+			helper.SendErrorResponse(w, "", constants.	TokenExipired, http.StatusUnauthorized)
 			return
 		}
 	}

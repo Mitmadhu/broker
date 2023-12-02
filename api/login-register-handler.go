@@ -5,16 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Mitmadhu/commons/handle_http"
+	clients "github.com/Mitmadhu/commons/clients"
 
+	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
 	"github.com/Mitmadhu/broker/config"
-	"github.com/Mitmadhu/broker/auth/jwt"
-	"github.com/Mitmadhu/broker/constants"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
-	cmnConsts "github.com/Mitmadhu/commons/constants"
+	"github.com/Mitmadhu/commons/constants"
 	cmnHelper "github.com/Mitmadhu/commons/helper"
-	"github.com/Mitmadhu/broker/helper"
 	"github.com/Mitmadhu/mysqlDB/database/model"
 	mysqlDto "github.com/Mitmadhu/mysqlDB/dto"
 )
@@ -25,40 +23,53 @@ func Login(w http.ResponseWriter, dto interface{}) {
 		cmnHelper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
 		return
 	}
-	// validate password
-	byteResp, err := handle_http.Call(config.Configs.Endpoints[cmnConsts.MYSQLDB] + "/user-exists", http.MethodPost, mysqlDto.ValidateUserRequest{
-		BaseRequest: mysqlDto.BaseRequest{MsgId: req.MsgId},
-		Username:    req.Username,
-		Password:    req.Password,
+
+	// TODO validate user
+	mysqlClient := clients.MysqlClientImpl{}
+	loginResp, err := mysqlClient.Login(config.Configs.Endpoints[constants.MYSQLDB], "POST", mysqlDto.ValidateUserRequest{
+		Username: req.Username,
+		Password: req.Password,
+		BaseRequest: mysqlDto.BaseRequest{
+			MsgID: req.MsgID,
+		},
 	})
 
 	if err != nil {
-		cmnHelper.SendErrorResponse(w, req.MsgId, err.Error(), http.StatusUnauthorized)
+		println(err.Error())
+		cmnHelper.SendErrorResponse(w, req.MsgID, "", http.StatusInternalServerError)
 		return
 	}
-	validate := &mysqlDto.ValidateUserResponse{}
-	json.Unmarshal(byteResp, validate)
-	
-	if !validate.IsValid {
-		cmnHelper.SendErrorResponse(w, req.MsgId, constants.UserNotFound , http.StatusUnauthorized)
+	// TODO: validate loginResp
+	if loginResp.IsValid == nil {
+		println("nil login response received from mysql")
+		cmnHelper.SendErrorResponse(w, req.MsgID, "", http.StatusInternalServerError)
+		return
+	}
+
+	if !(*loginResp.IsValid) {
+		cmnHelper.SendErrorResponse(w, req.MsgID, constants.UserNotFound, http.StatusNotFound)
 		return
 	}
 
 	accessToken, refreshToken, err := jwtAuth.GenerateToken(req.Username)
-	if err != nil{
+	if err != nil {
 		fmt.Printf("error while generating jwt token, err: %v", err.Error())
-		cmnHelper.SendErrorResponse(w, req.MsgId, "internal server error", http.StatusInternalServerError)
+		cmnHelper.SendErrorResponse(w, req.MsgID, "", http.StatusInternalServerError)
 		return
 	}
 	resp := response.LoginResponse{
+		BaseResponse: response.BaseResponse{
+			MsgID:          req.MsgID,
+			Success:        true,
+			StatusCode:     http.StatusOK,
+			AccessToken:    accessToken,
+			RefreshToken:   refreshToken,
+			IsTokenRefresh: true,
+		},
 		Success: true,
 	}
-	claims := helper.JWTValidation{
-		AccessToken: accessToken,
-		RefreshToken: refreshToken,
-		IsRefreshed: true,
-	}
-	helper.SendSuccessRespWithClaims(w, req.MsgId, resp, http.StatusAccepted, claims)
+
+	cmnHelper.SendSuccessResponse(w, resp, http.StatusOK)
 }
 
 func Register(w http.ResponseWriter, dto interface{}) {
@@ -71,7 +82,7 @@ func Register(w http.ResponseWriter, dto interface{}) {
 	u := model.User{}
 	_, err := u.GetUserByUsername(req.Username)
 	if err == nil {
-		cmnHelper.SendErrorResponse(w, req.MsgId, constants.UsernameExists, http.StatusBadRequest)
+		cmnHelper.SendErrorResponse(w, req.MsgID, constants.UsernameExists, http.StatusBadRequest)
 		return
 	}
 
@@ -79,11 +90,21 @@ func Register(w http.ResponseWriter, dto interface{}) {
 	// model.User.Register(dto.u)
 	if err != nil {
 		println(err)
-		cmnHelper.SendErrorResponse(w, req.MsgId, "something went wrong", http.StatusInternalServerError)
+		cmnHelper.SendErrorResponse(w, req.MsgID, "something went wrong", http.StatusInternalServerError)
+
 		return
 	}
+	// generate token
+	accessToken, refreshToken := "", ""
 	response := response.RegisterResponse{
+		BaseResponse: response.BaseResponse{
+			MsgID:        req.MsgID,
+			Success:      true,
+			StatusCode:   http.StatusAccepted,
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+		},
 		Username: req.Username,
 	}
-	cmnHelper.SendSuccessResponse(w, req.MsgId, response, http.StatusCreated)
+	cmnHelper.SendSuccessResponse(w, response, http.StatusCreated)
 }

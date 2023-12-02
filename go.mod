@@ -3,8 +3,8 @@ module github.com/Mitmadhu/broker
 go 1.21.1
 
 require (
-	github.com/Mitmadhu/commons v0.0.0-20231127150318-d0b3dc0a2bb9
-	github.com/Mitmadhu/mysqlDB v1.0.2-0.20231126131255-207a3672ae1c
+	github.com/Mitmadhu/commons v0.0.0-20231202044040-74ad5f1b01fb
+	github.com/Mitmadhu/mysqlDB v1.0.2-0.20231130143218-bdf7748b849e
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 
 )

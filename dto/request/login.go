@@ -23,7 +23,7 @@ type RegisterRequest struct {
 
 func (l LoginRequest) HasError(w http.ResponseWriter) bool {
 	errs := []error{}
-	helper.CheckEmpty(l.MsgId, &errs, "msg_id")
+	helper.CheckEmpty(l.MsgID, &errs, "msg_id")
 	helper.CheckEmpty(l.Password, &errs, "password")
 	helper.CheckEmpty(l.Username, &errs, "username")
 	if len(errs) > 0 {
@@ -34,7 +34,7 @@ func (l LoginRequest) HasError(w http.ResponseWriter) bool {
 
 func (l RegisterRequest) HasError(w http.ResponseWriter) bool {
 	errs := []error{}
-	helper.CheckEmpty(l.MsgId, &errs, "msg_id")
+	helper.CheckEmpty(l.MsgID, &errs, "msg_id")
 	helper.CheckEmpty(l.Password, &errs, "password")
 	helper.CheckEmpty(l.Username, &errs, "username")
 	helper.CheckEmpty(l.FirstName, &errs, "first_name")
