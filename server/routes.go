@@ -33,3 +33,4 @@ func InitRouter() {
 	}
 	server.Routers(config.Configs.Port)
 }
+

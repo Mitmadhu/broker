@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -90,6 +91,7 @@ func Register(w http.ResponseWriter, dto interface{}) {
 	if err != nil {
 		println(err)
 		cmnHelper.SendErrorResponse(w, req.MsgID, "something went wrong", http.StatusInternalServerError)
+
 		return
 	}
 	// generate token
