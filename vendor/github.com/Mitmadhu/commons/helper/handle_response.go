@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Mitmadhu/commons/constants"
 	"github.com/Mitmadhu/commons/dto/response"
 )
 
@@ -11,6 +12,9 @@ func SendErrorResponse(w http.ResponseWriter, msgID, msg string, code uint64) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(int(code))
 	
+	if code == http.StatusInternalServerError {
+		msg = constants.StatusInternalServerError
+	}
 	errResp := response.ErrorResponse{
 		MsgId:      msgID,
 		Message:    msg,
@@ -21,18 +25,10 @@ func SendErrorResponse(w http.ResponseWriter, msgID, msg string, code uint64) {
 	w.Write(b)
 }
 
-func SendSuccessResponse(w http.ResponseWriter, msgID string, resp interface{}, code int) {
+func SendSuccessResponse(w http.ResponseWriter, resp interface{}, code int) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(code)
-	succResp := response.SuccessResponse{
-		BaseResponse: response.BaseResponse{
-			MsgID: msgID,
-			StatusCode: code,
-			Success: true,
-		},
-		Response:   resp,
-	}
-	b, _ := json.Marshal(succResp)
+	b, _ := json.Marshal(resp)
 	w.Write(b)
 }
 

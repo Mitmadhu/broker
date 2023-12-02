@@ -1,11 +1,7 @@
 package helper
 
 import (
-	"encoding/json"
-	"net/http"
-
 	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
-	"github.com/Mitmadhu/broker/dto/response"
 )
 
 type JWTValidation struct {
@@ -36,20 +32,12 @@ func GetJWTClaims(aToken, rToken string) (*JWTValidation, error) {
 	return &JWTValidation{IsRefreshed: false, CustomClaims: claim}, nil
 }
 
-func SendSuccessRespWithClaims(w http.ResponseWriter, msgID string, resp interface{}, code response.HttpStatus, claims JWTValidation) {
-	w.Header().Set("Content-type", "application/json")
-	w.WriteHeader(int(code))
-	succResp := response.SuccessResponse{
-		BaseResponse: response.BaseResponse{
-			MsgID:          msgID,
-			StatusCode:     code,
-			Success:        true,
-			IsTokenRefresh: claims.IsRefreshed,
-			AccessToken:    claims.AccessToken,
-			RefreshToken:   claims.RefreshToken,
-		},
-		Response: resp,
-	}
-	b, _ := json.Marshal(succResp)
-	w.Write(b)
-}
+// func SendSuccessRespWithClaims(w http.ResponseWriter, msgID string, resp interface{}, code response.HttpStatus, claims JWTValidation) {
+// 	w.Header().Set("Content-type", "application/json")
+// 	w.WriteHeader(int(code))
+// 	succResp := {
+// 		Response: resp,
+// 	}
+// 	b, _ := json.Marshal(succResp)
+// 	w.Write(b)
+// }

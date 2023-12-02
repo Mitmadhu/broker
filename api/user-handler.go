@@ -5,8 +5,9 @@ import (
 
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
-	commonHelper "github.com/Mitmadhu/commons/helper"
 	"github.com/Mitmadhu/broker/helper"
+	cmnHelper "github.com/Mitmadhu/commons/helper"
+	commonHelper "github.com/Mitmadhu/commons/helper"
 	"github.com/Mitmadhu/mysqlDB/database/model"
 )
 
@@ -23,14 +24,21 @@ func GetUserDetails(w http.ResponseWriter, dto interface{}) {
 	u := model.User{}
 	user, err := u.GetUserByID("1")
 	if err != nil {
-		commonHelper.SendErrorResponse(w, "internal server err", req.MsgId, http.StatusInternalServerError)
+		commonHelper.SendErrorResponse(w, "internal server err", req.MsgID, http.StatusInternalServerError)
 		return
 	}
 	resp := response.UserDetailsResponse{
+		BaseResponse: response.BaseResponse{
+			MsgID:          req.MsgID,
+			StatusCode:     http.StatusAccepted,
+			Success:        true,
+			IsTokenRefresh: claims.IsRefreshed,
+			AccessToken:    claims.AccessToken,
+			RefreshToken:   claims.RefreshToken,
+		},
 		Username: user.Username,
 		Age:      user.Age,
 		Address:  "bandal",
 	}
-	helper.SendSuccessRespWithClaims(w, req.MsgId, resp, http.StatusAccepted, *claims)
-
+	cmnHelper.SendSuccessResponse(w, resp, http.StatusAccepted)
 }

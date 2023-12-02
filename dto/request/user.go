@@ -15,7 +15,7 @@ type UserDetailsRequest struct {
 
 func (u *UserDetailsRequest) HasError(w http.ResponseWriter) bool {
 	errs := []error{}
-	helper.CheckEmpty(u.MsgId, &errs, "msg_id")
+	helper.CheckEmpty(u.MsgID, &errs, "msg_id")
 	helper.CheckEmpty(u.Username, &errs, "username")
 	helper.CheckEmpty(u.AccessToken, &errs, "access token")
 	helper.CheckEmpty(u.RefreshToken, &errs, "refresh token")
