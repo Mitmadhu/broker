@@ -5,7 +5,6 @@ import (
 
 	"github.com/Mitmadhu/broker/api"
 	"github.com/Mitmadhu/broker/config"
-	"github.com/Mitmadhu/broker/config"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/commons/constants"
 	"github.com/Mitmadhu/commons/server"
