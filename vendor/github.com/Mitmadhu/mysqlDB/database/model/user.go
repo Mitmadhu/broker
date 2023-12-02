@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/Mitmadhu/broker/constants"
+	"github.com/Mitmadhu/commons/constants"
 	"github.com/Mitmadhu/mysqlDB/config"
 	"github.com/Mitmadhu/mysqlDB/helper"
 	"gorm.io/gorm"
@@ -39,7 +39,7 @@ func (u User) GetUserByUsername(username string) (*User, error) {
 	db := config.GetDB()
 	result := db.Where("Username = ?", username).First(&user)
 	if result == nil {
-		return nil, errors.New(constants.InternalServerError)
+		return nil, errors.New(constants.StatusInternalServerError)
 	}
 	if result.Error == gorm.ErrRecordNotFound {
 		return nil, errors.New(constants.UserNotFound)

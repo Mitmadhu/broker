@@ -20,6 +20,7 @@ var ValidHTTPMethods = map[string]bool{
 }
 
 func Call(url string, method string, body interface{}) ([]byte, error) {
+
 	println(url)
 	_, exists := ValidHTTPMethods[method]
 	if !exists {
@@ -40,9 +41,9 @@ func Call(url string, method string, body interface{}) ([]byte, error) {
 
 	// sending the request
 	resp, err := httpClient.Do(request)
-
 	if err != nil {
 		return nil, err
 	}
+
 	return ioutil.ReadAll(resp.Body)
 }

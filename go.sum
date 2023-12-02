@@ -1,7 +1,7 @@
-github.com/Mitmadhu/commons v0.0.0-20231202044040-74ad5f1b01fb h1:68jy/HcRj8fX72IfJdJ7OMtjO3H/X0vL2y9wqQQOhdo=
-github.com/Mitmadhu/commons v0.0.0-20231202044040-74ad5f1b01fb/go.mod h1:nbgio+4A78jIDY4mvwKDmgZxFoKqlODzNJQhgSaRJDM=
-github.com/Mitmadhu/mysqlDB v1.0.2-0.20231130143218-bdf7748b849e h1:K/ZkI/ZblTi/JoxKdXvkxbzAPDBLJ6v/jFkZ+gKvERY=
-github.com/Mitmadhu/mysqlDB v1.0.2-0.20231130143218-bdf7748b849e/go.mod h1:QuBDLeu5RdvBCxpgtAoZot94VHEv/bbMflw4HoHDzDo=
+github.com/Mitmadhu/commons v0.0.0-20231202054941-b52135c7f087 h1:B6bx1A3fW2ybITZWkEEqQIK5AXrn1nzT8pIeY1sUHmQ=
+github.com/Mitmadhu/commons v0.0.0-20231202054941-b52135c7f087/go.mod h1:nbgio+4A78jIDY4mvwKDmgZxFoKqlODzNJQhgSaRJDM=
+github.com/Mitmadhu/mysqlDB v1.0.2-0.20231202060731-7cffd2060c81 h1:44HU6v308knC0N+lsJoar5bu/YAeNTI8KcCrqWopvCQ=
+github.com/Mitmadhu/mysqlDB v1.0.2-0.20231202060731-7cffd2060c81/go.mod h1:eXzn9Pt2w6xgGVJF1qZFyWWKW+s4gwWmbMkJk4z8mto=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/felixge/httpsnoop v1.0.1 h1:lvB5Jl89CsZtGIWuTcDM1E/vkVs49/Ml7JJe07l8SPQ=
