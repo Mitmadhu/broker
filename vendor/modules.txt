@@ -1,4 +1,4 @@
-# github.com/Mitmadhu/commons v0.0.0-20231202044040-74ad5f1b01fb
+# github.com/Mitmadhu/commons v0.0.0-20231202054941-b52135c7f087
 ## explicit; go 1.21.1
 github.com/Mitmadhu/commons/clients
 github.com/Mitmadhu/commons/constants
@@ -6,7 +6,7 @@ github.com/Mitmadhu/commons/dto/response
 github.com/Mitmadhu/commons/handle_http
 github.com/Mitmadhu/commons/helper
 github.com/Mitmadhu/commons/server
-# github.com/Mitmadhu/mysqlDB v1.0.2-0.20231130143218-bdf7748b849e
+# github.com/Mitmadhu/mysqlDB v1.0.2-0.20231202060731-7cffd2060c81
 ## explicit; go 1.21.1
 github.com/Mitmadhu/mysqlDB/config
 github.com/Mitmadhu/mysqlDB/database
@@ -16,17 +16,17 @@ github.com/Mitmadhu/mysqlDB/helper
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 ## explicit
 github.com/dgrijalva/jwt-go
-# github.com/felixge/httpsnoop v1.0.1
+# github.com/felixge/httpsnoop v1.0.4
 ## explicit; go 1.13
 github.com/felixge/httpsnoop
 # github.com/go-sql-driver/mysql v1.7.1
 ## explicit; go 1.13
 github.com/go-sql-driver/mysql
-# github.com/gorilla/handlers v1.5.1
-## explicit; go 1.14
+# github.com/gorilla/handlers v1.5.2
+## explicit; go 1.20
 github.com/gorilla/handlers
-# github.com/gorilla/mux v1.8.0
-## explicit; go 1.12
+# github.com/gorilla/mux v1.8.1
+## explicit; go 1.20
 github.com/gorilla/mux
 # github.com/jinzhu/inflection v1.0.0
 ## explicit
@@ -34,15 +34,15 @@ github.com/jinzhu/inflection
 # github.com/jinzhu/now v1.1.5
 ## explicit; go 1.12
 github.com/jinzhu/now
-# golang.org/x/crypto v0.13.0
-## explicit; go 1.17
+# golang.org/x/crypto v0.16.0
+## explicit; go 1.18
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
-# gorm.io/driver/mysql v1.5.1
+# gorm.io/driver/mysql v1.5.2
 ## explicit; go 1.14
 gorm.io/driver/mysql
-# gorm.io/gorm v1.25.4
-## explicit; go 1.16
+# gorm.io/gorm v1.25.5
+## explicit; go 1.18
 gorm.io/gorm
 gorm.io/gorm/callbacks
 gorm.io/gorm/clause

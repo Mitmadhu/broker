@@ -2,9 +2,8 @@ package constants
 
 const (
 	//endpoints
-	MYSQLDB = "mysqlDB"
+	MYSQLDB      = "mysqlDB"
 	USER_SERVICE = "user_service"
-
 
 	ReqPtr         = "reqPtr"
 	AccessToken    = "accessToken"
@@ -14,5 +13,11 @@ const (
 
 	// errors
 	StatusInternalServerError = "internal server error"
-	TokenExipired = "token has expired"
+	TokenExipired             = "token has expired"
+	InternalServerError       = "internal server error"
+	UserNotFound              = "user not found"
+	InvalidJWTToken           = "invalid JWT token"
+	InvalidClaim              = "invalid claim"
+	UsernameExists            = "username exists"
+	BadRequest                = "bad request"
 )
