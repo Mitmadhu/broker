@@ -5,14 +5,12 @@ import (
 	"net/http"
 
 	clients "github.com/Mitmadhu/commons/clients"
-
 	jwtAuth "github.com/Mitmadhu/broker/auth/jwt"
 	"github.com/Mitmadhu/broker/config"
 	"github.com/Mitmadhu/broker/dto/request"
 	"github.com/Mitmadhu/broker/dto/response"
 	"github.com/Mitmadhu/commons/constants"
 	cmnHelper "github.com/Mitmadhu/commons/helper"
-	"github.com/Mitmadhu/mysqlDB/database/model"
 	mysqlDto "github.com/Mitmadhu/mysqlDB/dto"
 )
 
@@ -77,25 +75,33 @@ func Register(w http.ResponseWriter, dto interface{}) {
 	req, ok := dto.(*request.RegisterRequest)
 	if !ok {
 		cmnHelper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
-		cmnHelper.SendErrorResponse(w, "", "invalid request body", http.StatusBadRequest)
 		return
 	}
-	// check if username is available
-	u := model.User{}
-	_, err := u.GetUserByUsername(req.Username)
-	if err == nil {
-		cmnHelper.SendErrorResponse(w, req.MsgID, constants.UsernameExists, http.StatusBadRequest)
-		cmnHelper.SendErrorResponse(w, req.MsgID, constants.UsernameExists, http.StatusBadRequest)
+	
+	// register http call
+	mysqlClient := clients.MysqlClientImpl{}
+	registerResp, err := mysqlClient.Register(config.Configs.Endpoints[constants.MYSQLDB], http.MethodGet, mysqlDto.RegisterUserRequest{
+		BaseRequest: mysqlDto.BaseRequest{
+			MsgID: req.MsgID,
+		},
+		Username: req.Username,
+		Password: req.Password,
+		LastName: req.LastName,
+		FirstName: req.FirstName,
+		Age : req.Age,
+	})
+
+	if (err != nil){
+		println(err.Error())
+		cmnHelper.SendErrorResponse(w, req.MsgID, "", http.StatusInternalServerError)
+		return
+	}
+	
+	if registerResp.Message == constants.UsernameExists {
+		cmnHelper.SendErrorResponse(w, req.MsgID, constants.UsernameExists, uint64(registerResp.StatusCode))
 		return
 	}
 
-	err = model.User{}.Register(req.Username, req.Password, req.FirstName, req.LastName, req.Age)
-	// model.User.Register(dto.u)
-	if err != nil {
-		println(err)
-		cmnHelper.SendErrorResponse(w, req.MsgID, "something went wrong", http.StatusInternalServerError)
-		return
-	}
 	// generate token
 	accessToken, refreshToken := "", ""
 	response := response.RegisterResponse{

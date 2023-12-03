@@ -20,8 +20,6 @@ var ValidHTTPMethods = map[string]bool{
 }
 
 func Call(url string, method string, body interface{}) ([]byte, error) {
-
-	println(url)
 	_, exists := ValidHTTPMethods[method]
 	if !exists {
 		return nil, errors.New("invalid method")
