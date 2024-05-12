@@ -24,7 +24,7 @@ type RegisterUserRequest struct{
 	LastName string `json:"last_name"`
 	FirstName string `json:"first_name"`
 	Password string `json:"password"`
-	Age uint16 `json:"age`
+	Age uint16 `json:"age"`
 }
 
 type RegisterUserResponse struct{

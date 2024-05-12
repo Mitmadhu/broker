@@ -38,6 +38,7 @@ func (m *MysqlClientImpl) Register(url string, method string, req mysqlDto.Regis
 	if err != nil {
 		return nil, err
 	}
+
 	genericResp := &mysqlDto.RegisterUserResponse{}
 	err = json.Unmarshal(byteResp, genericResp)
 	if err != nil {

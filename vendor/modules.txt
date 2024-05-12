@@ -6,13 +6,16 @@ github.com/Mitmadhu/commons/dto/response
 github.com/Mitmadhu/commons/handle_http
 github.com/Mitmadhu/commons/helper
 github.com/Mitmadhu/commons/server
-# github.com/Mitmadhu/mysqlDB v1.0.2-0.20231203054703-3604da2d29b4
+# github.com/Mitmadhu/mysqlDB v1.0.2-0.20231227123306-7f6e0edbe96d
 ## explicit; go 1.21.1
 github.com/Mitmadhu/mysqlDB/config
 github.com/Mitmadhu/mysqlDB/database
 github.com/Mitmadhu/mysqlDB/database/model
 github.com/Mitmadhu/mysqlDB/dto
 github.com/Mitmadhu/mysqlDB/helper
+# github.com/davecgh/go-spew v1.1.1
+## explicit
+github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 ## explicit
 github.com/dgrijalva/jwt-go
@@ -34,10 +37,19 @@ github.com/jinzhu/inflection
 # github.com/jinzhu/now v1.1.5
 ## explicit; go 1.12
 github.com/jinzhu/now
+# github.com/pmezard/go-difflib v1.0.0
+## explicit
+github.com/pmezard/go-difflib/difflib
+# github.com/stretchr/testify v1.9.0
+## explicit; go 1.17
+github.com/stretchr/testify/assert
 # golang.org/x/crypto v0.16.0
 ## explicit; go 1.18
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
+# gopkg.in/yaml.v3 v3.0.1
+## explicit
+gopkg.in/yaml.v3
 # gorm.io/driver/mysql v1.5.2
 ## explicit; go 1.14
 gorm.io/driver/mysql

@@ -1,0 +1,23 @@
+name: go-demo-action
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    run_test:
+        name: run-test
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+            
+            - name: setup
+              uses:  actions/setup-go@v5.0.1
+            
+            - name: run-test
+              run: go test ./...
+            
+
