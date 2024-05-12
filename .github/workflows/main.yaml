@@ -34,11 +34,12 @@ jobs:
 
             - name: Build docker image
               run: |
-                docker buildx build --platform linux/amd64,linux/arm64 -t MadhuMnnit/brockerImg:latest . 
-                docker save -o brokerImg.tar MadhuMnnit/brockerImg:latest 
+                docker buildx build --platform linux/amd64,linux/arm64 -t madhumnnit/brockerimg:latest . 
+                docker save -o brokerImg.tar madhumnnit/brockerimg:latest 
             - name : Uploading docker image as artifact in brocker repository
               uses: actions/upload-artifact@v2
               with:
-                name : brockerImg 
-                path : brockerImg.tar      
+                name : brockerimg 
+                path : brockerimg.tar      
+
 
